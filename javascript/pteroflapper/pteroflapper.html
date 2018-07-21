@@ -23,8 +23,9 @@
         var starText;
         var stars;
         var player;
-        var platforms;
-        var ptero;
+        let platforms, ground;
+        var pteros;
+        
         var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
             preload: preload,
             create: create,
@@ -48,8 +49,7 @@
 
             //  A simple background for our game
             game.add.sprite(0, 0, 'sky');
-            game.add.sprite(0, 0, 'star');
-
+            
             //  The platforms group contains the ground and the 2 ledges we can jump on
             platforms = game.add.group();
 
@@ -57,8 +57,9 @@
             platforms.enableBody = true;
 
             // Here we create the ground.
-            var ground = platforms.create(0, game.world.height - 64, 'ground');
-
+            
+            ground = platforms.create(0,game.world.height - 64, 'ground');
+            
             //  Scale it to fit the width of the game (the original sprite is s in size)
             ground.scale.setTo(2, 2);
 
@@ -76,9 +77,6 @@
             // -- PLAYER
             createPlayer()
 
-            //-- PTERO FLAPPER
-            createPteroFlapper()
-
 
             //--CURSOR
             cursors = game.input.keyboard.createCursorKeys();
@@ -87,10 +85,10 @@
             stars = game.add.group();
 
             stars.enableBody = true;
-            starText = game.add.text(50, 50, 'stars: 0', {
+            /*starText = game.add.text(50, 50, 'stars: 0', {
                 fontSize: '32px',
                 fill: '#000'
-            });
+            });*/
             createMoreStars(12, function () {
                 numStars += 12;
             });
@@ -106,8 +104,15 @@
             bombs = game.add.group();
 
             bombs.enableBody = true;
+            //-- Ptero flappers
+            pteros = game.add.group();
+            pteros.enableBody = true
+            
+            createPteroFlapper(50)
 
-            game.time.events.loop(Phaser.Timer.SECOND * 10, createBombs, this,4);
+
+
+            setUpTimers()
         }
 
         function update() {
@@ -115,7 +120,12 @@
             var starCollides = game.physics.arcade.collide(stars, platforms)
             playerAnimation()
             bombAninmation()
-            pteroFlapperAnimation()
+            game.physics.arcade.overlap(pteros, platforms, updatePosition, null, this);
+            function updatePosition(ptero,p){
+                console.log("collison detected")
+                //game.physics.arcade.moveToXY(ptero,ptero.body.x,ptero.body.y-50,40,500)
+            }
+            
 
         }
 
@@ -123,20 +133,24 @@
             var bombCollides = game.physics.arcade.collide(platforms, bombs, explode);
 
             game.physics.arcade.overlap(player, bombs, killPlayer, null, this);
+            game.physics.arcade.overlap(player, pteros, killPlayer, null, this);
             //game.physics.arcade.overlap(platforms, bombs, explode, null, this);
 
             function killPlayer(player, bomb) {
-                bomb.animations.play('explode', 10, false, true);
+                if(bomb){
+                    bomb.animations.play('explode', 10, false, true);
+                }
                 player.kill()
-                
+
 
             }
-            function explode(platforms,bomb){
+
+            function explode(platforms, bomb) {
                 bomb.animations.play('explode', 10, false, true);
                 //bomb.kill()
             }
-                
-               
+
+
         }
 
         function playerAnimation() {
@@ -171,14 +185,14 @@
             game.physics.arcade.overlap(player, stars, collectStar, null, this);
         }
 
-        function pteroFlapperAnimation(){
+        function pteroFlapperAnimation(ptero) {
             ptero.animations.play("flapping");
             ptero.body.velocity.x = 100;
         }
 
         function createBombs(num) {
             for (var i = 0; i < num; i++) {
-                var bomb = bombs.create(i * 300, 20, 'explosion',0);
+                var bomb = bombs.create(i * 300, 20, 'explosion', 0);
                 //bomb = game.add.sprite(100, 20, 'explosion');
                 //  We need to enable physics on the player
                 game.physics.arcade.enable(bomb);
@@ -214,12 +228,21 @@
             player.animations.add('right', [5, 6, 7, 8], 10, true);
         }
 
-        function createPteroFlapper() {
-            // The player and its settings
-            ptero = game.add.sprite(200, game.world.height - 350, 'pteroflapper',1);
+
+        function createPteroFlapper(y) {
+            let ny=(y+150)%(game.world.height)
+            let ptero = pteros.create(0, ny, 'pteroflapper', 1);
+            ptero.scale.setTo(0.4, 0.4)
             game.physics.arcade.enable(ptero);
             ptero.animations.add('flapping', [0, 1], 5, true);
-            ptero.scale.setTo(0.4,0.4)
+            pteroFlapperAnimation(ptero)
+            game.time.events.add(Phaser.Timer.SECOND * 3, createPteroFlapper, this,ny);
+
+        }
+
+        function setUpTimers() {
+            game.time.events.loop(Phaser.Timer.SECOND * 10, createBombs, this, 4);
+
         }
     </script>
 
