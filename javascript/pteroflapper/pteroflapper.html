@@ -24,6 +24,7 @@
         var stars;
         var player;
         var platforms;
+        var ptero;
         var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
             preload: preload,
             create: create,
@@ -114,6 +115,7 @@
             var starCollides = game.physics.arcade.collide(stars, platforms)
             playerAnimation()
             bombAninmation()
+            pteroFlapperAnimation()
 
         }
 
@@ -169,6 +171,11 @@
             game.physics.arcade.overlap(player, stars, collectStar, null, this);
         }
 
+        function pteroFlapperAnimation(){
+            ptero.animations.play("flapping");
+            ptero.body.velocity.x = 100;
+        }
+
         function createBombs(num) {
             for (var i = 0; i < num; i++) {
                 var bomb = bombs.create(i * 300, 20, 'explosion',0);
@@ -209,7 +216,9 @@
 
         function createPteroFlapper() {
             // The player and its settings
-            ptero = game.add.sprite(200, game.world.height - 250, 'pteroflapper',1);
+            ptero = game.add.sprite(200, game.world.height - 350, 'pteroflapper',1);
+            game.physics.arcade.enable(ptero);
+            ptero.animations.add('flapping', [0, 1], 5, true);
             ptero.scale.setTo(0.4,0.4)
         }
     </script>
