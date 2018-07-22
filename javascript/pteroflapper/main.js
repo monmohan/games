@@ -24,6 +24,7 @@ function preload() {
     game.load.spritesheet('bomb', 'assets/bombs/002.png', 256, 256);
     game.load.spritesheet('explosion', 'assets/bombs/explosion.png', 64, 64);
     game.load.spritesheet('pteroflapper', 'assets/ptero-flapper2.png', 256, 156);
+    game.load.spritesheet('candies', 'assets/candies.png', 82, 86);
 }
 
 function create() {
