@@ -7,6 +7,7 @@ var stars;
 var player;
 let platforms, ground;
 var pteros;
+var gameOver;
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
     preload: preload,
@@ -92,9 +93,14 @@ function create() {
 
     createPteroFlapper(50)
 
-
-
     setUpTimers()
+
+    gameOver = game.add.text(game.world.centerX, game.world.centerY, 'GAME OVER!', {
+        font: '84px Arial',
+        fill: '#fff'
+    });
+    gameOver.anchor.setTo(0.5, 0.5);
+    gameOver.visible = false;
 }
 
 function update() {
@@ -102,11 +108,27 @@ function update() {
     var starCollides = game.physics.arcade.collide(stars, platforms)
     playerAnimation()
     bombAninmation()
-    game.physics.arcade.overlap(pteros, platforms, updatePosition, null, this);
+    game.physics.arcade.collide(pteros, platforms, handleCollision, null, this);
+    game.physics.arcade.overlap(pteros, platforms, handleOverlap, null, this);
 
-    function updatePosition(ptero, p) {
-        console.log("collison detected")
-        
+    function handleCollision(ptero, platform) {
+        ptero.body.bounce.x = 0.5
+        ptero.body.bounce.y = 0.5
+        ptero.body.velocity.x = -20
+        ptero.body.gravity.y = 10
+
+    }
+
+    function handleOverlap(ptero, platform) {
+        ptero.body.bounce.x = 0.3
+        ptero.body.bounce.y = 0.3
+        ptero.body.position.y -= 2
+        //ptero.body.gravity.y=10
+
+    }
+
+    if(!player.alive){
+        gameOver.visible=true
     }
 
 
@@ -116,8 +138,8 @@ function bombAninmation() {
     var bombCollides = game.physics.arcade.collide(platforms, bombs, explode);
 
     game.physics.arcade.overlap(player, bombs, killPlayer, null, this);
-    game.physics.arcade.overlap(player, pteros, killPlayer, null, this);
-    //game.physics.arcade.overlap(platforms, bombs, explode, null, this);
+    game.physics.arcade.collide(player, pteros, killPlayer, null, this);
+
 
     function killPlayer(player, bomb) {
         if (bomb) {
@@ -213,13 +235,13 @@ function createPlayer() {
 
 
 function createPteroFlapper(y) {
-    let ny = (y + 150) % (game.world.height)
+    let ny = (y + 150) % (game.world.height - 70)
     let ptero = pteros.create(0, ny, 'pteroflapper', 1);
     ptero.scale.setTo(0.4, 0.4)
     game.physics.arcade.enable(ptero);
     ptero.animations.add('flapping', [0, 1], 5, true);
     pteroFlapperAnimation(ptero)
-    game.time.events.add(Phaser.Timer.SECOND * 3, createPteroFlapper, this, ny);
+    game.time.events.add(Phaser.Timer.SECOND * 5, createPteroFlapper, this, ny);
 
 }
 
