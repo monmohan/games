@@ -3,8 +3,8 @@ function setupStars() {
 
     stars.enableBody = true;
     //starText = game.add.text(50, 50, 'stars: 0', { fontSize: '32px', fill: '#000' });
-    createMoreStars(12, function () {
-        numStars += 12;
+    createMoreStars(15, function () {
+        numStars += 15;
     });
 
 
@@ -19,9 +19,9 @@ function collectStar(player, star) {
     score += 10;
     scoreText.text = 'Score: ' + score;
     //starText.text=numStars+creatingStars;
-    if (numStars < 5) {
-        createMoreStars(12, function () {
-            numStars += 12
+    if (numStars < 8) {
+        createMoreStars(15, function () {
+            numStars += 15
         })
 
     }

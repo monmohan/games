@@ -5,7 +5,7 @@ var creatingStars = false;
 var starText;
 var stars;
 var player;
-let platforms, ground;
+let platforms, ground, ledge1,ledge2;
 var pteros;
 var gameOver;
 
@@ -51,13 +51,13 @@ function create() {
     ground.body.immovable = true;
 
     //  Now let's create two ledges
-    var ledge = platforms.create(400, 400, 'ground');
+    ledge1 = platforms.create(400, 400, 'ground');
 
-    ledge.body.immovable = true;
+    ledge1.body.immovable = true;
 
-    ledge = platforms.create(-150, 250, 'ground');
+    ledge2 = platforms.create(-150, 250, 'ground');
 
-    ledge.body.immovable = true;
+    ledge2.body.immovable = true;
     // -- PLAYER
     createPlayer()
 
@@ -198,7 +198,7 @@ function pteroFlapperAnimation(ptero) {
 
 function createBombs(num) {
     for (var i = 0; i < num; i++) {
-        var bomb = bombs.create(i * 300, 20, 'explosion', 0);
+        var bomb = bombs.create(i * 200, 20, 'explosion', 0);
         //bomb = game.add.sprite(100, 20, 'explosion');
         //  We need to enable physics on the player
         game.physics.arcade.enable(bomb);
@@ -236,7 +236,7 @@ function createPlayer() {
 
 
 function createPteroFlapper(y) {
-    let ny = (y + 150) % (game.world.height - 70)
+    let ny = (y + game.rnd.integerInRange(10,300)) % (game.world.height - 70)
     let ptero = pteros.create(0, ny, 'pteroflapper', 1);
     ptero.scale.setTo(0.4, 0.4)
     game.physics.arcade.enable(ptero);
@@ -246,7 +246,13 @@ function createPteroFlapper(y) {
 
 }
 
+function reducePlatform(){
+    ledge1.scale.setTo(0.9,0.9)
+    ledge2.scale.setTo(0.9,0.9)
+}
+
 function setUpTimers() {
-    game.time.events.loop(Phaser.Timer.SECOND * 10, createBombs, this, 4);
+    game.time.events.loop(Phaser.Timer.SECOND * 6, createBombs, this, 6);
+    game.time.events.loop(Phaser.Timer.SECOND * 19, reducePlatform, this);
 
 }
