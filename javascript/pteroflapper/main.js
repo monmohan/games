@@ -1,4 +1,3 @@
-var candies;
 let playerController, player;
 let candyController;
 
@@ -7,7 +6,7 @@ let pteros, raptors;
 var gameOver;
 
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
+var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
     preload: preload,
     create: create,
     update: update
@@ -50,8 +49,7 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 
     candyController = new CandyController(game);
-    candies = candyController.candies
-
+    
 
     //--BOMB
     bombController = new BombController(game)
@@ -78,10 +76,9 @@ function create() {
 
 function update() {
     //  Collide the player and the candies with the platforms
-    var starCollides = game.physics.arcade.collide(candies, platforms)
-    playerController.playerAnimation(platforms, candies)
-    //Player overlap with candies
-    game.physics.arcade.overlap(player, candies, candyController.collectCandies, null, candyController);
+    candyController.onUpdate(platforms,player)
+    
+    playerController.playerAnimation(platforms)
     bombController.bombAninmation(platforms, pteros, raptors, player)
     game.physics.arcade.collide(pteros, platforms, handleCollision, null, this);
     game.physics.arcade.overlap(pteros, platforms, handleOverlap, null, this);

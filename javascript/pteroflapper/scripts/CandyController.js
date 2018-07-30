@@ -12,8 +12,7 @@
             fill: '#000'
         });
         this.setupcandies();
-
-
+        this.game=game;
 
     }
 
@@ -28,7 +27,7 @@
         // Removes the star from the screen
         candy.kill();
         this.numcandies--
-        score += 10;
+            score += 10;
         scoreText.text = 'Score: ' + score;
 
         if (this.numcandies < 8) {
@@ -55,6 +54,12 @@
         }
         creatingcandies = false
         this.numcandies += num
+    }
+
+    CandyController.prototype.onUpdate = function (platforms, player) {
+        var starCollides = this.game.physics.arcade.collide(this.candies, platforms)
+        this.game.physics.arcade.overlap(player, this.candies, this.collectCandies, null, this);
+
     }
     module.exports = CandyController;
 })();

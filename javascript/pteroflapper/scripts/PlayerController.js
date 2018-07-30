@@ -17,7 +17,7 @@
     }
 
 
-    PlayerController.prototype.playerAnimation = function (platforms,stars, collectStar) {
+    PlayerController.prototype.playerAnimation = function (platforms) {
         var hitPlatform = this.game.physics.arcade.collide(this.player, platforms);
 
         //  Reset the players velocity (movement)
@@ -47,5 +47,5 @@
 
 
     }
-    module.exports=PlayerController
+    module.exports = PlayerController
 })();
