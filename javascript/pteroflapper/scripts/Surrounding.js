@@ -1,5 +1,9 @@
 (function () {
     function Surrounding(game) {
+        //  A simple background for our game
+        game.add.sprite(0, 0, 'sky');
+
+
         this.platforms = game.add.group();
 
         //  We will enable physics for any object that is created in this group

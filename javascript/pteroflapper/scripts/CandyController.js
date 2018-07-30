@@ -1,51 +1,49 @@
 (function () {
-    var creatingStars = false;
-    let score=0;
+    var creatingcandies = false;
+    let score = 0;
     let scoreText;
 
     function CandyController(game) {
-        this.stars = game.add.group();
-        this.stars.enableBody = true;
-        this.numStars = 0
+        this.candies = game.add.group();
+        this.candies.enableBody = true;
+        this.numcandies = 0
         scoreText = game.add.text(16, 16, 'score: 0', {
             fontSize: '32px',
             fill: '#000'
         });
-        this.setupStars();
-        
-        
-    
-    }
-    
-    CandyController.prototype.setupStars = function () {
-        this.createMoreStars(15)
+        this.setupcandies();
+
 
 
     }
 
-    CandyController.prototype.collectStar = function (player, star) {
+    CandyController.prototype.setupcandies = function () {
+        this.createMorecandies(15)
+
+
+    }
+
+    CandyController.prototype.collectCandies = function (player, candy) {
 
         // Removes the star from the screen
-        star.kill();
-        this.numStars--
+        candy.kill();
+        this.numcandies--
         score += 10;
         scoreText.text = 'Score: ' + score;
-        
-        if (this.numStars < 8) {
-            this.createMoreStars(15)
+
+        if (this.numcandies < 8) {
+            this.createMorecandies(15)
 
         }
 
     }
 
-    CandyController.prototype.createMoreStars = function (num) {
-        if (creatingStars) return
-        creatingStars = true
+    CandyController.prototype.createMorecandies = function (num) {
+        if (creatingcandies) return
+        creatingcandies = true
         //  Here we'll create 12 of them evenly spaced apart
         for (var i = 0; i < num; i++) {
-            //  Create a star inside of the 'stars' group
-            //var star = stars.create(i * 70, 0, 'star');
-            let star = this.stars.create(i * 70, 0, 'candies', i % 4)
+            let star = this.candies.create(i * 70, 0, 'candies', i % 4)
             star.scale.setTo(0.4, 0.4);
 
             //  Let gravity do its thing
@@ -55,8 +53,8 @@
             star.body.bounce.y = 0.5 + Math.random() * 0.2;
 
         }
-        creatingStars = false
-        this.numStars += num
+        creatingcandies = false
+        this.numcandies += num
     }
     module.exports = CandyController;
 })();

@@ -1,16 +1,11 @@
-var score = 0;
-var scoreText;
-var numStars = 0;
-
-var starText;
-var stars;
+var candies;
 let playerController, player;
 let candyController;
 
 let platforms, ground;
 let pteros, raptors;
 var gameOver;
-let bombController, bombs;
+
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
     preload: preload,
@@ -22,7 +17,10 @@ let Surrounding = require('./scripts/Surrounding.js')
 let CandyController = require('./scripts/CandyController.js')
 let PteroController = require('./scripts/PteroController.js')
 let PlayerController = require('./scripts/PlayerController.js')
+
 let BombController = require('./scripts/BombController.js')
+let bombController;
+
 
 function preload() {
     game.load.image('sky', 'assets/sky.png');
@@ -39,11 +37,7 @@ function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    //  A simple background for our game
-    game.add.sprite(0, 0, 'sky');
-
     s = new Surrounding(game)
-    console.log(s)
     platforms = s.platforms;
     ground = s.ground;
 
@@ -56,13 +50,12 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 
     candyController = new CandyController(game);
-    stars = candyController.stars
+    candies = candyController.candies
 
-    
+
     //--BOMB
     bombController = new BombController(game)
-    bombs = bombController.bombs;
-
+    
     //-- Ptero flappers
     let pteroController = new PteroController(game);
     pteros = pteroController.pteros
@@ -84,12 +77,12 @@ function create() {
 }
 
 function update() {
-    //  Collide the player and the stars with the platforms
-    var starCollides = game.physics.arcade.collide(stars, platforms)
-    playerController.playerAnimation(platforms, stars)
-            //Player overlap with stars
-    game.physics.arcade.overlap(player, stars, candyController.collectStar, null, candyController);
-    bombController.bombAninmation(platforms, bombs, pteros, player)
+    //  Collide the player and the candies with the platforms
+    var starCollides = game.physics.arcade.collide(candies, platforms)
+    playerController.playerAnimation(platforms, candies)
+    //Player overlap with candies
+    game.physics.arcade.overlap(player, candies, candyController.collectCandies, null, candyController);
+    bombController.bombAninmation(platforms, pteros, raptors, player)
     game.physics.arcade.collide(pteros, platforms, handleCollision, null, this);
     game.physics.arcade.overlap(pteros, platforms, handleOverlap, null, this);
 
