@@ -6,7 +6,7 @@ var starText;
 var stars;
 var player;
 let platforms, ground, ledge1,ledge2;
-var pteros;
+var pteros,raptors;
 var gameOver;
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
@@ -19,12 +19,12 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
 function preload() {
     game.load.image('sky', 'assets/sky.png');
     game.load.image('ground', 'assets/platform.png');
-    game.load.image('star', 'assets/star.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
     game.load.spritesheet('bomb', 'assets/bombs/002.png', 256, 256);
     game.load.spritesheet('explosion', 'assets/bombs/explosion.png', 64, 64);
     game.load.spritesheet('pteroflapper', 'assets/ptero-flapper2.png', 256, 156);
     game.load.spritesheet('candies', 'assets/candies.png', 82, 86);
+    game.load.spritesheet('velociraptor', 'assets/velociraptor.png', 274, 186,4);
 }
 
 function create() {
@@ -102,6 +102,12 @@ function create() {
     });
     gameOver.anchor.setTo(0.5, 0.5);
     gameOver.visible = false;
+
+    //-- Raptor
+    raptors = game.add.group();
+    raptors.enableBody = true
+    
+    game.time.events.add(Phaser.Timer.SECOND * 4, createRaptor, this);
 }
 
 function update() {
@@ -140,6 +146,7 @@ function bombAninmation() {
 
     game.physics.arcade.overlap(player, bombs, killPlayer, null, this);
     game.physics.arcade.collide(player, pteros, killPlayer, null, this);
+    game.physics.arcade.collide(player, raptors, killPlayer, null, this);
 
 
     function killPlayer(player, bomb) {
@@ -245,14 +252,30 @@ function createPteroFlapper(y) {
     game.time.events.add(Phaser.Timer.SECOND * 5, createPteroFlapper, this, ny);
 
 }
+function createRaptor(scaleFactor,height, max){
+    if(max===3){return}
+    max=max||0
+    sf=scaleFactor || 0.75
+    height=height || (game.world.height-200)
+    let raptor = raptors.create(game.world.width,height , 'velociraptor', 0);
+    raptor.scale.setTo(sf, sf)
+    game.physics.arcade.enable(raptor);
+    raptor.animations.add('walk', [0,1,2,3], 6, true);
+    raptor.animations.play("walk");
+    raptor.body.velocity.x = -100;
+    max++
+    game.time.events.add(Phaser.Timer.SECOND * 1, createRaptor, this, 0.25,(game.world.height-100),max);
+    
+}
 
 function reducePlatform(){
     ledge1.scale.setTo(0.9,0.9)
-    ledge2.scale.setTo(0.9,0.9)
+    ledge2.scale.setTo(0.8,0.9)
 }
 
 function setUpTimers() {
     game.time.events.loop(Phaser.Timer.SECOND * 6, createBombs, this, 6);
     game.time.events.loop(Phaser.Timer.SECOND * 19, reducePlatform, this);
+    game.time.events.loop(Phaser.Timer.SECOND * 20, createRaptor, this);
 
 }
