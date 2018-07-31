@@ -31,12 +31,8 @@
 
     BombController.prototype.onUpdate = function (gameContext) {
         var bombCollides = this.game.physics.arcade.collide(gameContext.platforms, this.bombs, explode);
-
         this.game.physics.arcade.overlap(gameContext.player, this.bombs, killPlayer, null, this);
-        this.game.physics.arcade.collide(gameContext.player, gameContext.pteros, killPlayer, null, this);
-        this.game.physics.arcade.collide(gameContext.player, gameContext.raptors, killPlayer, null, this);
-
-
+        
         function killPlayer(player, bomb) {
             if (bomb) {
                 bomb.animations.play('explode', 10, false, true);

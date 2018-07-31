@@ -25,6 +25,7 @@
     PteroController.prototype.onUpdate = function (gameContext) {
         this.game.physics.arcade.collide(this.pteros, gameContext.platforms, handleCollision, null, this);
         this.game.physics.arcade.overlap(this.pteros, gameContext.platforms, handleOverlap, null, this);
+        this.game.physics.arcade.collide(gameContext.player, gameContext.pteros, killPlayer, null, this);
 
         function handleCollision(ptero, platform) {
             ptero.body.bounce.x = 0.5
@@ -40,6 +41,9 @@
             ptero.body.position.y -= 2
             //ptero.body.gravity.y=10
 
+        }
+        function killPlayer(player, ptero){
+            player.kill()
         }
 
     }

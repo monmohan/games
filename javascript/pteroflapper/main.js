@@ -58,6 +58,7 @@ function update() {
     playerController.onUpdate(gameContext)
     bombController.onUpdate(gameContext)
     pteroController.onUpdate(gameContext)
+    raptorController.onUpdate(gameContext)
     playerController.refresh(gameContext)
     
 }

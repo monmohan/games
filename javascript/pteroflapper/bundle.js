@@ -59,6 +59,7 @@ function update() {
     playerController.onUpdate(gameContext)
     bombController.onUpdate(gameContext)
     pteroController.onUpdate(gameContext)
+    raptorController.onUpdate(gameContext)
     playerController.refresh(gameContext)
     
 }
@@ -97,12 +98,8 @@ function update() {
 
     BombController.prototype.onUpdate = function (gameContext) {
         var bombCollides = this.game.physics.arcade.collide(gameContext.platforms, this.bombs, explode);
-
         this.game.physics.arcade.overlap(gameContext.player, this.bombs, killPlayer, null, this);
-        this.game.physics.arcade.collide(gameContext.player, gameContext.pteros, killPlayer, null, this);
-        this.game.physics.arcade.collide(gameContext.player, gameContext.raptors, killPlayer, null, this);
-
-
+        
         function killPlayer(player, bomb) {
             if (bomb) {
                 bomb.animations.play('explode', 10, false, true);
@@ -289,6 +286,7 @@ function update() {
     PteroController.prototype.onUpdate = function (gameContext) {
         this.game.physics.arcade.collide(this.pteros, gameContext.platforms, handleCollision, null, this);
         this.game.physics.arcade.overlap(this.pteros, gameContext.platforms, handleOverlap, null, this);
+        this.game.physics.arcade.collide(gameContext.player, gameContext.pteros, killPlayer, null, this);
 
         function handleCollision(ptero, platform) {
             ptero.body.bounce.x = 0.5
@@ -305,6 +303,9 @@ function update() {
             //ptero.body.gravity.y=10
 
         }
+        function killPlayer(player, ptero){
+            player.kill()
+        }
 
     }
     module.exports = PteroController
@@ -312,12 +313,13 @@ function update() {
 },{}],7:[function(require,module,exports){
 (function () {
     let _game;
+
     function RaptorController(game) {
         raptors = game.add.group();
         raptors.enableBody = true
         this.raptors = raptors
         game.time.events.add(Phaser.Timer.SECOND * 4, this.createRaptor, this);
-        _game=game;
+        _game = game;
         game.time.events.loop(Phaser.Timer.SECOND * 20, this.createRaptor, this);
     }
 
@@ -338,7 +340,15 @@ function update() {
         _game.time.events.add(Phaser.Timer.SECOND * 1, this.createRaptor, this, 0.25, (_game.world.height - 100), max);
 
     }
-module.exports=RaptorController
+    RaptorController.prototype.onUpdate = function(gameContext){
+        _game.physics.arcade.collide(gameContext.player, gameContext.raptors, killPlayer, null, this);
+        function killPlayer(player,raptor){
+            player.kill();
+        }
+    }
+    
+
+    module.exports = RaptorController
 
 })();
 },{}],8:[function(require,module,exports){
