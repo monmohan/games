@@ -6,6 +6,7 @@
         this.raptors = raptors
         game.time.events.add(Phaser.Timer.SECOND * 4, this.createRaptor, this);
         _game=game;
+        game.time.events.loop(Phaser.Timer.SECOND * 20, this.createRaptor, this);
     }
 
     RaptorController.prototype.createRaptor = function (scaleFactor, height, max) {

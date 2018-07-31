@@ -48,7 +48,6 @@ function create() {
     bombController = new BombController(game)
     pteroController = new PteroController(game);
     raptorController = new RaptorController(game);
-    setUpTimers()
     gameContext=new GameConext(playerController.player,candyController.candies,raptors,pteroController.pteros,s.platforms)
 
     
@@ -61,12 +60,4 @@ function update() {
     pteroController.onUpdate(gameContext)
     playerController.refresh(gameContext)
     
-}
-
-
-
-function setUpTimers() {
-    game.time.events.loop(Phaser.Timer.SECOND * 6, bombController.createBombs, bombController, 6);
-    game.time.events.loop(Phaser.Timer.SECOND * 20, raptorController.createRaptor, raptorController);
-
 }

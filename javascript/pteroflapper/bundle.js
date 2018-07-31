@@ -49,7 +49,6 @@ function create() {
     bombController = new BombController(game)
     pteroController = new PteroController(game);
     raptorController = new RaptorController(game);
-    setUpTimers()
     gameContext=new GameConext(playerController.player,candyController.candies,raptors,pteroController.pteros,s.platforms)
 
     
@@ -64,19 +63,13 @@ function update() {
     
 }
 
-
-
-function setUpTimers() {
-    game.time.events.loop(Phaser.Timer.SECOND * 6, bombController.createBombs, bombController, 6);
-    game.time.events.loop(Phaser.Timer.SECOND * 20, raptorController.createRaptor, raptorController);
-
-}
 },{"./scripts/BombController.js":2,"./scripts/CandyController.js":3,"./scripts/GameContext.js":4,"./scripts/PlayerController.js":5,"./scripts/PteroController.js":6,"./scripts/RaptorController.js":7,"./scripts/Surrounding.js":8}],2:[function(require,module,exports){
 (function () {
     function BombController(game) {
         this.bombs = game.add.group();
         this.bombs.enableBody = true;
         this.game = game;
+        game.time.events.loop(Phaser.Timer.SECOND * 6, this.createBombs, this, 6);
 
     }
     BombController.prototype.createBombs = function (num) {
@@ -325,6 +318,7 @@ function setUpTimers() {
         this.raptors = raptors
         game.time.events.add(Phaser.Timer.SECOND * 4, this.createRaptor, this);
         _game=game;
+        game.time.events.loop(Phaser.Timer.SECOND * 20, this.createRaptor, this);
     }
 
     RaptorController.prototype.createRaptor = function (scaleFactor, height, max) {

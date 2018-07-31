@@ -3,6 +3,7 @@
         this.bombs = game.add.group();
         this.bombs.enableBody = true;
         this.game = game;
+        game.time.events.loop(Phaser.Timer.SECOND * 6, this.createBombs, this, 6);
 
     }
     BombController.prototype.createBombs = function (num) {
