@@ -1,5 +1,5 @@
 (function () {
-    var creatingcandies = false;
+    let creatingcandies = false;
     let score = 0;
     let scoreText;
 
@@ -11,17 +11,12 @@
             fontSize: '32px',
             fill: '#000'
         });
-        this.setupcandies();
+        this.createMorecandies(15)
         this.game=game;
 
     }
 
-    CandyController.prototype.setupcandies = function () {
-        this.createMorecandies(15)
-
-
-    }
-
+    
     CandyController.prototype.collectCandies = function (player, candy) {
 
         // Removes the star from the screen
@@ -56,9 +51,9 @@
         this.numcandies += num
     }
 
-    CandyController.prototype.onUpdate = function (platforms, player) {
-        var starCollides = this.game.physics.arcade.collide(this.candies, platforms)
-        this.game.physics.arcade.overlap(player, this.candies, this.collectCandies, null, this);
+    CandyController.prototype.onUpdate = function (gameContext) {
+        var starCollides = this.game.physics.arcade.collide(gameContext.candies, gameContext.platforms)
+        this.game.physics.arcade.overlap(gameContext.player, gameContext.candies, this.collectCandies, null, this);
 
     }
     module.exports = CandyController;

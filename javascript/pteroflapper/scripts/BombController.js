@@ -28,12 +28,12 @@
 
     }
 
-    BombController.prototype.bombAninmation = function (platforms, pteros, raptors, player) {
-        var bombCollides = this.game.physics.arcade.collide(platforms, this.bombs, explode);
+    BombController.prototype.onUpdate = function (gameContext) {
+        var bombCollides = this.game.physics.arcade.collide(gameContext.platforms, this.bombs, explode);
 
-        this.game.physics.arcade.overlap(player, this.bombs, killPlayer, null, this);
-        this.game.physics.arcade.collide(player, pteros, killPlayer, null, this);
-        this.game.physics.arcade.collide(player, raptors, killPlayer, null, this);
+        this.game.physics.arcade.overlap(gameContext.player, this.bombs, killPlayer, null, this);
+        this.game.physics.arcade.collide(gameContext.player, gameContext.pteros, killPlayer, null, this);
+        this.game.physics.arcade.collide(gameContext.player, gameContext.raptors, killPlayer, null, this);
 
 
         function killPlayer(player, bomb) {

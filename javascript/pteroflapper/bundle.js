@@ -1,11 +1,24 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-let playerController, player;
+let Surrounding = require('./scripts/Surrounding.js')
+
+let CandyController = require('./scripts/CandyController.js')
 let candyController;
 
-let platforms, ground;
-let pteros, raptors;
-var gameOver;
+let PteroController = require('./scripts/PteroController.js')
+let pteroController;
 
+let PlayerController = require('./scripts/PlayerController.js')
+let playerController;
+
+
+let BombController = require('./scripts/BombController.js')
+let bombController;
+
+let GameConext = require('./scripts/GameContext.js')
+let gameContext;
+
+let RaptorController=require('./scripts/RaptorController.js')
+let raptorController;
 
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
     preload: preload,
@@ -13,13 +26,6 @@ var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', {
     update: update
 });
 
-let Surrounding = require('./scripts/Surrounding.js')
-let CandyController = require('./scripts/CandyController.js')
-let PteroController = require('./scripts/PteroController.js')
-let PlayerController = require('./scripts/PlayerController.js')
-
-let BombController = require('./scripts/BombController.js')
-let bombController;
 
 
 function preload() {
@@ -36,103 +42,36 @@ function preload() {
 function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
-
-    s = new Surrounding(game)
-    platforms = s.platforms;
-    ground = s.ground;
-
-    // -- 
-    playerController = new PlayerController(game)
-    player = playerController.player
-
-
-    //--CURSOR
     cursors = game.input.keyboard.createCursorKeys();
-
+    let s = new Surrounding(game)
+    playerController = new PlayerController(game)
     candyController = new CandyController(game);
-    
-
-    //--BOMB
     bombController = new BombController(game)
-    
-    //-- Ptero flappers
-    let pteroController = new PteroController(game);
-    pteros = pteroController.pteros
-
+    pteroController = new PteroController(game);
+    raptorController = new RaptorController(game);
     setUpTimers()
+    gameContext=new GameConext(playerController.player,candyController.candies,raptors,pteroController.pteros,s.platforms)
 
-    gameOver = game.add.text(game.world.centerX, game.world.centerY, 'GAME OVER!', {
-        font: '84px Arial',
-        fill: '#fff'
-    });
-    gameOver.anchor.setTo(0.5, 0.5);
-    gameOver.visible = false;
-
-    //-- Raptor
-    raptors = game.add.group();
-    raptors.enableBody = true
-
-    game.time.events.add(Phaser.Timer.SECOND * 4, createRaptor, this);
+    
 }
 
 function update() {
-    //  Collide the player and the candies with the platforms
-    candyController.onUpdate(platforms,player)
+    candyController.onUpdate(gameContext)
+    playerController.onUpdate(gameContext)
+    bombController.onUpdate(gameContext)
+    pteroController.onUpdate(gameContext)
+    playerController.refresh(gameContext)
     
-    playerController.playerAnimation(platforms)
-    bombController.bombAninmation(platforms, pteros, raptors, player)
-    game.physics.arcade.collide(pteros, platforms, handleCollision, null, this);
-    game.physics.arcade.overlap(pteros, platforms, handleOverlap, null, this);
-
-    function handleCollision(ptero, platform) {
-        ptero.body.bounce.x = 0.5
-        ptero.body.bounce.y = 0.5
-        ptero.body.velocity.x = -20
-        ptero.body.gravity.y = 10
-
-    }
-
-    function handleOverlap(ptero, platform) {
-        ptero.body.bounce.x = 0.3
-        ptero.body.bounce.y = 0.3
-        ptero.body.position.y -= 2
-        //ptero.body.gravity.y=10
-
-    }
-
-    if (!player.alive) {
-        gameOver.visible = true
-    }
-
-
 }
 
-
-function createRaptor(scaleFactor, height, max) {
-    if (max === 3) {
-        return
-    }
-    max = max || 0
-    sf = scaleFactor || 0.75
-    height = height || (game.world.height - 200)
-    let raptor = raptors.create(game.world.width, height, 'velociraptor', 0);
-    raptor.scale.setTo(sf, sf)
-    game.physics.arcade.enable(raptor);
-    raptor.animations.add('walk', [0, 1, 2, 3], 6, true);
-    raptor.animations.play("walk");
-    raptor.body.velocity.x = -100;
-    max++
-    game.time.events.add(Phaser.Timer.SECOND * 1, createRaptor, this, 0.25, (game.world.height - 100), max);
-
-}
 
 
 function setUpTimers() {
     game.time.events.loop(Phaser.Timer.SECOND * 6, bombController.createBombs, bombController, 6);
-    game.time.events.loop(Phaser.Timer.SECOND * 20, createRaptor, this);
+    game.time.events.loop(Phaser.Timer.SECOND * 20, raptorController.createRaptor, raptorController);
 
 }
-},{"./scripts/BombController.js":2,"./scripts/CandyController.js":3,"./scripts/PlayerController.js":4,"./scripts/PteroController.js":5,"./scripts/Surrounding.js":6}],2:[function(require,module,exports){
+},{"./scripts/BombController.js":2,"./scripts/CandyController.js":3,"./scripts/GameContext.js":4,"./scripts/PlayerController.js":5,"./scripts/PteroController.js":6,"./scripts/RaptorController.js":7,"./scripts/Surrounding.js":8}],2:[function(require,module,exports){
 (function () {
     function BombController(game) {
         this.bombs = game.add.group();
@@ -163,12 +102,12 @@ function setUpTimers() {
 
     }
 
-    BombController.prototype.bombAninmation = function (platforms, pteros, raptors, player) {
-        var bombCollides = this.game.physics.arcade.collide(platforms, this.bombs, explode);
+    BombController.prototype.onUpdate = function (gameContext) {
+        var bombCollides = this.game.physics.arcade.collide(gameContext.platforms, this.bombs, explode);
 
-        this.game.physics.arcade.overlap(player, this.bombs, killPlayer, null, this);
-        this.game.physics.arcade.collide(player, pteros, killPlayer, null, this);
-        this.game.physics.arcade.collide(player, raptors, killPlayer, null, this);
+        this.game.physics.arcade.overlap(gameContext.player, this.bombs, killPlayer, null, this);
+        this.game.physics.arcade.collide(gameContext.player, gameContext.pteros, killPlayer, null, this);
+        this.game.physics.arcade.collide(gameContext.player, gameContext.raptors, killPlayer, null, this);
 
 
         function killPlayer(player, bomb) {
@@ -191,7 +130,7 @@ function setUpTimers() {
 })();
 },{}],3:[function(require,module,exports){
 (function () {
-    var creatingcandies = false;
+    let creatingcandies = false;
     let score = 0;
     let scoreText;
 
@@ -203,17 +142,12 @@ function setUpTimers() {
             fontSize: '32px',
             fill: '#000'
         });
-        this.setupcandies();
+        this.createMorecandies(15)
         this.game=game;
 
     }
 
-    CandyController.prototype.setupcandies = function () {
-        this.createMorecandies(15)
-
-
-    }
-
+    
     CandyController.prototype.collectCandies = function (player, candy) {
 
         // Removes the star from the screen
@@ -248,15 +182,30 @@ function setUpTimers() {
         this.numcandies += num
     }
 
-    CandyController.prototype.onUpdate = function (platforms, player) {
-        var starCollides = this.game.physics.arcade.collide(this.candies, platforms)
-        this.game.physics.arcade.overlap(player, this.candies, this.collectCandies, null, this);
+    CandyController.prototype.onUpdate = function (gameContext) {
+        var starCollides = this.game.physics.arcade.collide(gameContext.candies, gameContext.platforms)
+        this.game.physics.arcade.overlap(gameContext.player, gameContext.candies, this.collectCandies, null, this);
 
     }
     module.exports = CandyController;
 })();
 },{}],4:[function(require,module,exports){
+(function(){
+    
+    function GameContext(player, candies, raptors, pteros, platforms){
+        this.player=player
+        this.platforms=platforms
+        this.raptors=raptors
+        this.pteros=pteros
+        this.candies=candies
+    }
+    module.exports=GameContext
+
+})();
+},{}],5:[function(require,module,exports){
 (function () {
+    let gameOver
+
     function PlayerController(game) {
         // The player and its settings
         let player = game.add.sprite(100, game.world.height - 150, 'dude');
@@ -272,11 +221,17 @@ function setUpTimers() {
         player.animations.add('right', [5, 6, 7, 8], 10, true);
         this.game = game;
         this.player = player
+        gameOver = game.add.text(game.world.centerX, game.world.centerY, 'GAME OVER!', {
+            font: '84px Arial',
+            fill: '#fff'
+        });
+        gameOver.anchor.setTo(0.5, 0.5);
+        gameOver.visible = false;
     }
 
 
-    PlayerController.prototype.playerAnimation = function (platforms) {
-        var hitPlatform = this.game.physics.arcade.collide(this.player, platforms);
+    PlayerController.prototype.onUpdate = function (gameContext) {
+        var hitPlatform = this.game.physics.arcade.collide(this.player, gameContext.platforms);
 
         //  Reset the players velocity (movement)
         this.player.body.velocity.x = 0;
@@ -305,9 +260,15 @@ function setUpTimers() {
 
 
     }
+    PlayerController.prototype.refresh = function (gameContext) {
+        if (!this.player.alive) {
+            gameOver.visible = true
+        }
+
+    }
     module.exports = PlayerController
 })();
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function () {
     function PteroController(game) {
         this.game = game
@@ -332,9 +293,61 @@ function setUpTimers() {
         this.game.time.events.add(Phaser.Timer.SECOND * 5, this.createPteroFlapper, this, ny);
 
     }
-    module.exports=PteroController
+    PteroController.prototype.onUpdate = function (gameContext) {
+        this.game.physics.arcade.collide(this.pteros, gameContext.platforms, handleCollision, null, this);
+        this.game.physics.arcade.overlap(this.pteros, gameContext.platforms, handleOverlap, null, this);
+
+        function handleCollision(ptero, platform) {
+            ptero.body.bounce.x = 0.5
+            ptero.body.bounce.y = 0.5
+            ptero.body.velocity.x = -20
+            ptero.body.gravity.y = 10
+
+        }
+
+        function handleOverlap(ptero, platform) {
+            ptero.body.bounce.x = 0.3
+            ptero.body.bounce.y = 0.3
+            ptero.body.position.y -= 2
+            //ptero.body.gravity.y=10
+
+        }
+
+    }
+    module.exports = PteroController
 })();
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
+(function () {
+    let _game;
+    function RaptorController(game) {
+        raptors = game.add.group();
+        raptors.enableBody = true
+        this.raptors = raptors
+        game.time.events.add(Phaser.Timer.SECOND * 4, this.createRaptor, this);
+        _game=game;
+    }
+
+    RaptorController.prototype.createRaptor = function (scaleFactor, height, max) {
+        if (max === 3) {
+            return
+        }
+        max = max || 0
+        sf = scaleFactor || 0.75
+        height = height || (_game.world.height - 200)
+        let raptor = this.raptors.create(_game.world.width, height, 'velociraptor', 0);
+        raptor.scale.setTo(sf, sf)
+        _game.physics.arcade.enable(raptor);
+        raptor.animations.add('walk', [0, 1, 2, 3], 6, true);
+        raptor.animations.play("walk");
+        raptor.body.velocity.x = -100;
+        max++
+        _game.time.events.add(Phaser.Timer.SECOND * 1, this.createRaptor, this, 0.25, (_game.world.height - 100), max);
+
+    }
+module.exports=RaptorController
+
+})();
+},{}],8:[function(require,module,exports){
 (function () {
     function Surrounding(game) {
         //  A simple background for our game

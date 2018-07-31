@@ -1,4 +1,6 @@
 (function () {
+    let gameOver
+
     function PlayerController(game) {
         // The player and its settings
         let player = game.add.sprite(100, game.world.height - 150, 'dude');
@@ -14,11 +16,17 @@
         player.animations.add('right', [5, 6, 7, 8], 10, true);
         this.game = game;
         this.player = player
+        gameOver = game.add.text(game.world.centerX, game.world.centerY, 'GAME OVER!', {
+            font: '84px Arial',
+            fill: '#fff'
+        });
+        gameOver.anchor.setTo(0.5, 0.5);
+        gameOver.visible = false;
     }
 
 
-    PlayerController.prototype.playerAnimation = function (platforms) {
-        var hitPlatform = this.game.physics.arcade.collide(this.player, platforms);
+    PlayerController.prototype.onUpdate = function (gameContext) {
+        var hitPlatform = this.game.physics.arcade.collide(this.player, gameContext.platforms);
 
         //  Reset the players velocity (movement)
         this.player.body.velocity.x = 0;
@@ -45,6 +53,12 @@
             this.player.body.velocity.y = -400;
         }
 
+
+    }
+    PlayerController.prototype.refresh = function (gameContext) {
+        if (!this.player.alive) {
+            gameOver.visible = true
+        }
 
     }
     module.exports = PlayerController
