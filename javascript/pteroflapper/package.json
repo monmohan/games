@@ -1,0 +1,28 @@
+{
+  "name": "pteroflapper",
+  "version": "1.0.0",
+  "description": "A game with Pteroflapper Dinosaur",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/monmohan/games.git"
+  },
+  "keywords": [
+    "phaser",
+    "pteroflapper",
+    "game"
+  ],
+  "author": "monmohan@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/monmohan/games/issues"
+  },
+  "homepage": "https://github.com/monmohan/games#readme",
+  "dependencies": {
+    "browserify": "^16.2.3",
+    "phaser-ce": "^2.11.1"
+  }
+}
