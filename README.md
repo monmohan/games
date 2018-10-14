@@ -7,8 +7,8 @@ Dinosaur and candies.. Pick as many candies as you can and avoid getting hit by 
 
 * Run following commands 
   * $ `npm install phaser-ce` ,  $ `npm install browserify` , $ `npm install http-server`
-  * $ browserify main.js -o bundle.js
-  * $ http-server -p <port>
+  * $ `browserify main.js -o bundle.js`
+  * $ `http-server -p {port}`
 * Connect to `http://localhost:<port>/pteroflapper.html`
 
 You should see
