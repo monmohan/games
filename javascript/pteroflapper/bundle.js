@@ -258,7 +258,7 @@ function update() {
     }
     PlayerController.prototype.refresh = function (gameContext) {
         if (!this.player.alive) {
-            gameOver.visible = true
+            //gameOver.visible = true
         }
 
     }
