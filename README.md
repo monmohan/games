@@ -12,6 +12,6 @@ Dinosaur and candies.. Pick as many candies as you can and avoid getting hit by 
 * Connect to `http://localhost:<port>/pteroflapper.html`
 
 You should see
-![Pteroflapper](https://user-images.githubusercontent.com/1742745/46913614-4f408180-cfc3-11e8-9895-f8b4b004db30.png)
+![Pteroflapper](https://user-images.githubusercontent.com/1742745/46913651-148b1900-cfc4-11e8-86a4-8d7e2c5687de.png)
 
 
