@@ -1,0 +1,8 @@
+input {color:blue; font-size:32px; font-weight:bold;}
+img.spaced
+  {
+  margin-top:15px;
+  margin-left:75px;
+  border:5px solid #0000ff;
+  float:center; 
+  }

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+    <TITLE> Dynaminc Table </TITLE>
+    <META NAME="Generator" CONTENT="EditPlus">
+    <META NAME="Author" CONTENT="">
+    <META NAME="Keywords" CONTENT="">
+    <META NAME="Description" CONTENT="">
+</HEAD>
+<style>
+    <!--
+    @import url( courtyard.css );
+    -->
+</style>
+
+<SCRIPT src="courtyard.js">
+    <!--
+
+    //-->
+</SCRIPT>
+<SCRIPT>
+
+    window.onload = function() {
+        
+        var rs = 8;
+        var cs = 8;
+        var rowArr = new Object();
+
+        for (var i = 0; i < rs; i++) {
+            var colArr = new Object();
+            for (var j = 0; j < cs; j++) {
+                colArr[j] = i + "" + j;
+            }
+            rowArr[i] = colArr;
+        }
+
+        var table = new Table(rs, cs, rowArr);
+        var ctr = document.getElementById("conDiv");
+        table.render(ctr);
+        var singleTileRow = Math.floor(Math.random() * (rs - 1));
+        var singleTileColumn = Math.floor(Math.random() * (cs - 1));
+        alert("Randomly placing the single tile at " + singleTileRow + "," + singleTileRow);
+        table.placeSingleTile(singleTileRow, singleTileColumn);
+        table.tile(new Quad(0, rs - 1, 0, cs - 1));
+
+    };
+</SCRIPT>
+<BODY>
+<div id="conDiv">
+</div>
+
+</BODY>
+</HTML>

@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+    <TITLE> Ginnu Game </TITLE>
+    <META NAME="Generator" CONTENT="EditPlus">
+    <META NAME="Author" CONTENT="">
+    <META NAME="Keywords" CONTENT="">
+    <META NAME="Description" CONTENT="">
+</HEAD>
+<style>
+    <!--
+    @import url( challenge.css );
+    -->
+</style>
+
+<SCRIPT src="challenge.js">
+    <!--
+
+    //-->
+</SCRIPT>
+<SCRIPT>
+
+    window.onload = function() {
+        
+		var ctr = document.getElementById("challenge");
+		var ch=new Challenge('c1','HORSE','horse.jpg');		
+		var ch2=new Challenge('c2','HIPPOPOTAMUS','hippo.jpg');
+		var ch3=new Challenge('c3','PANTHER','panther.jpg');
+		var ch4=new Challenge('c4','ELEPHANT','elephant.jpg');
+		var ch5=new Challenge('c5','BUFFALO','buffalo.jpg');
+		var ch6=new Challenge('c6','KOALA','koala.jpg');
+		var ch7=new Challenge('c7','GIRAFFE','giraffe.jpg');
+		var ch8=new Challenge('c8','RABBIT','rabbit.jpg');
+		var ch8=new Challenge('c8','PRAKAMYA','prakamya.jpg');
+		var ch9=new Challenge('c9','GRAPE','grape.jpg');
+		var ch10=new Challenge('c10','BANANA','banana.jpg');
+		var ch11=new Challenge('c11','PAPAYA','papaya.jpg');
+		var ch12=new Challenge('c12','TOOTHBRUSH','toothbrush.jpg');
+		var ch13=new Challenge('c13','JERRY','jerry.jpg');
+
+        var chals=[ch,ch2,ch3,ch4,ch5,ch6,ch7,ch8,ch9,ch10,ch11,ch12,ch13
+		,new Challenge('c13','LION','lion.jpg')
+		,new Challenge('c14','CARROT','carrot.jpg')
+		,new Challenge('c13','ZEBRA','zebra.jpg')
+		,new Challenge('c15','POTATO','potato.jpg')
+		,new Challenge('c13','PIGEON','pigeon.jpg')
+		,new Challenge('c13','TOMATO','tomato.jpg')
+		,new Challenge('c13','DEER','deer.jpg')
+		,new Challenge('c13','KANGAROO','kangaroo.jpg')
+		,new Challenge('c13','PEACOCK','peacock.jpg')
+		,new Challenge('c13','ORANGE','orange.jpg')
+		,new Challenge('c13','LION','lion.jpg')
+		,new Challenge('c13','PANTS','pants.jpg')
+		,new Challenge('c13','SWEATER','sweater.jpg')
+		,new Challenge('c13','ELMO','elmo.jpg')
+		,new Challenge('c13','ROSE','rose.jpg')
+		,new Challenge('c13','CARDAMOM','cardamom.jpg')
+		,new Challenge('c13','CAKE','cake.jpg')
+		,new Challenge('c13','STAIRS','stairs.jpg')
+		,new Challenge('c13','FOX','fox.jpg')
+		,new Challenge('c13','RABBIT','rabbit.jpg')
+		,new Challenge('c13','SPARROW','sparrow.jpg')
+		,new Challenge('c13','SHIRT','shirt.jpg')
+		,new Challenge('c13','SHOES','shoes.jpg')
+		,new Challenge('c13','EAGLE','eagle.jpg')
+		,new Challenge('c13','BOOKS','books.jpg')
+		,new Challenge('c13','MONKEY','monkey.jpg')
+		,new Challenge('c13','TREE','tree.jpg')
+		,new Challenge('c13','TIGER','tiger.jpg')
+
+		];
+		var res=document.getElementById("result")
+		var clr=new Controller(chals,ctr,result);
+		window.controller=clr;
+		clr.showNext();
+		        
+    };
+</SCRIPT>
+<BODY>
+<div id="controller">
+<div class="pos_fixed" id="challenge">
+</div>
+<div class="pos_fixed" id="result">
+</div>
+</div>
+<!--<div>
+<embed src="bgmusic.mp3" hidden="true" autostart="true" id="success_sound" loop="true"/>
+</div>-->
+
+</BODY>
+</HTML>

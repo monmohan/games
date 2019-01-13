@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+    <TITLE> Ginnu Game </TITLE>
+    <META NAME="Generator" CONTENT="EditPlus">
+    <META NAME="Author" CONTENT="">
+    <META NAME="Keywords" CONTENT="">
+    <META NAME="Description" CONTENT="">
+</HEAD>
+<style>
+    <!--
+    @import url( challenge.css );
+    -->
+</style>
+
+<SCRIPT src="numbertrain.js">
+    <!--
+
+    //-->
+</SCRIPT>
+<SCRIPT>
+
+    window.onload = function() {
+        var nt=new NumberTrain("NT");
+		var ctr = document.getElementById("challenge");
+		var res=document.getElementById("result")
+		var clr=new Controller(nt,ctr,result);
+		window.controller=clr;
+		clr.showNext();
+		        
+    };
+</SCRIPT>
+<BODY>
+<div id="controller">
+<div class="pos_fixed" id="challenge">
+
+</div>
+<div class="pos_fixed" id="result">
+</div>
+</div>
+<div>
+<embed src="bgmusic.mp3" hidden="true" autostart="false" id="success_sound" loop="true"/>
+</div>
+
+</BODY>
+</HTML>
